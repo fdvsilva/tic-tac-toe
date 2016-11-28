@@ -21,6 +21,7 @@ function foundMatchP(indexesArray, board) {
 
 
 function utility(board, isOpponent) {
+    //console.log(board);
     /*
       Checks if there is an horizontal match, i.e.,
       if at least a row holds 3 equal symbols
@@ -71,47 +72,44 @@ function utility(board, isOpponent) {
 }
 
 
-function minimax(board, isOpponent) {
+function minimax(board, isOpponent, depth) {
     
-    var utilityValue = utility(board, isOpponent);
+    var utilityValue = utility(board, !isOpponent);
     /* If utility or objecive funtion returns a non null value then 
        it found a terminal state where:
        -1: Opponent won;
         1: Player won;
         0: Draw.  
     */
-
-    
-    if (utilityValue) return {"utility": utilityValue, "board": []};
+    if (utilityValue) return {"utility": utilityValue, "board": board, "depth": depth};
 
     switch (isOpponent) {
 	
     case false:
-	var bestMove = {"utility":-100, "board": []};
+	var bestMove = {"utility": -Infinity, "board": board, "depth": depth};
 	for (var i in board) {
 	    if( board[i] === "?") {
 		board[i] = "X";
-		var nextMove = minimax(board,!isOpponent);
-		//console.log(nextMove.utility)
-		//console.log(nextMove.board);
-		//console.log("utility", utilityValue);
-		if (nextMove.utility > bestMove.utility) {
+		var nextMove = minimax(board,!isOpponent, depth + 1);
+		if ((nextMove.utility - nextMove.depth) > (bestMove.utility - bestMove.depth)) {
 		    bestMove.utility = nextMove.utility;
 		    bestMove.board = board.slice();
+		    bestMove.depth = nextMove.depth;
 		}
 		board[i] = "?";
 	    }
 	}
 	break;
     case true:
-	var bestMove = {"utility": 100, "board": []};
+	var bestMove = {"utility": Infinity, "board": board, "depth": depth};
 	for (var i in board) {
 	    if (board[i] === "?") {
 		board[i] = "O";
-		var nextMove = minimax(board,!isOpponent);
-		if (nextMove.utility < bestMove.utility) {
+		var nextMove = minimax(board,!isOpponent, depth + 1);
+		if ((nextMove.utility + nextMove.depth) < (bestMove.utility + bestMove.depth)) {
 		    bestMove.utility = nextMove.utility;
 		    bestMove.board = board.slice();
+		    bestMove.depth = nextMove.depth;
 		}
 		board[i] = "?";
 	    }
