@@ -6,8 +6,8 @@ function foundMatchP(indexesArray, board) {
 	       the current posititon is diferent than the next one then
 	       return false */
 	    if (debug) {
-		console.log (indexesArray[i][j], indexesArray[i][j+ 1]);
-		console.log (board[indexesArray[i][j]], board[indexesArray[i][j+ 1]]);
+		//console.log (indexesArray[i][j], indexesArray[i][j+ 1]);
+		//console.log (board[indexesArray[i][j]], board[indexesArray[i][j+ 1]]);
 	    };
 	    if (board[indexesArray[i][j]] === "?" ||  board[indexesArray[i][j]] !== board[indexesArray[i][j + 1]]) {
 		found = false;
@@ -28,7 +28,7 @@ function utility(board, isOpponent) {
           [ 0 0 0 ]
           [ . . . ]
     */
-    debug = true;
+    debug = false;
     var horizontalIndexes = [[0,1,2], [3,4,5], [6,7,8]];
     if (foundMatchP(horizontalIndexes, board)) {
 	if (!isOpponent) return 1;
@@ -72,14 +72,52 @@ function utility(board, isOpponent) {
 
 
 function minimax(board, isOpponent) {
-    var utility = utility(board, isOpponent);
+    
+    var utilityValue = utility(board, isOpponent);
     /* If utility or objecive funtion returns a non null value then 
        it found a terminal state where:
        -1: Opponent won;
         1: Player won;
         0: Draw.  
     */
-    if (utility) return [utility, board];
 
     
+    if (utilityValue) return {"utility": utilityValue, "board": []};
+
+    switch (isOpponent) {
+	
+    case false:
+	var bestMove = {"utility":-100, "board": []};
+	for (var i in board) {
+	    if( board[i] === "?") {
+		board[i] = "X";
+		var nextMove = minimax(board,!isOpponent);
+		//console.log(nextMove.utility)
+		//console.log(nextMove.board);
+		//console.log("utility", utilityValue);
+		if (nextMove.utility > bestMove.utility) {
+		    bestMove.utility = nextMove.utility;
+		    bestMove.board = board.slice();
+		}
+		board[i] = "?";
+	    }
+	}
+	break;
+    case true:
+	var bestMove = {"utility": 100, "board": []};
+	for (var i in board) {
+	    if (board[i] === "?") {
+		board[i] = "O";
+		var nextMove = minimax(board,!isOpponent);
+		if (nextMove.utility < bestMove.utility) {
+		    bestMove.utility = nextMove.utility;
+		    bestMove.board = board.slice();
+		}
+		board[i] = "?";
+	    }
+	}
+	break;
+    }
+
+    return bestMove;
 }
