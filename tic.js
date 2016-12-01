@@ -72,7 +72,7 @@ function utility(board, isOpponent) {
 }
 
 
-function minimax(board, isOpponent, depth) {
+function minimax(board, isOpponent, depth, alpha, beta) {
     
     var utilityValue = utility(board, !isOpponent);
     /* If utility or objecive funtion returns a non null value then 
@@ -88,9 +88,11 @@ function minimax(board, isOpponent, depth) {
     case false:
 	var bestMove = {"utility": -Infinity, "board": board, "depth": depth};
 	for (var i in board) {
+	    alpha = Math.max(alpha, bestMove.utility);
+	    if (alpha >= beta) return bestMove;
 	    if( board[i] === "?") {
 		board[i] = "X";
-		var nextMove = minimax(board,!isOpponent, depth + 1);
+		var nextMove = minimax(board,!isOpponent, depth + 1, alpha, beta);
 		if ((nextMove.utility - nextMove.depth) > (bestMove.utility - bestMove.depth)) {
 		    bestMove.utility = nextMove.utility;
 		    bestMove.board = board.slice();
@@ -103,9 +105,11 @@ function minimax(board, isOpponent, depth) {
     case true:
 	var bestMove = {"utility": Infinity, "board": board, "depth": depth};
 	for (var i in board) {
+	    beta = Math.min(beta, bestMove.utility);
+	    if (alpha >= beta) return bestMove;
 	    if (board[i] === "?") {
 		board[i] = "O";
-		var nextMove = minimax(board,!isOpponent, depth + 1);
+		var nextMove = minimax(board,!isOpponent, depth + 1, alpha, beta);
 		if ((nextMove.utility + nextMove.depth) < (bestMove.utility + bestMove.depth)) {
 		    bestMove.utility = nextMove.utility;
 		    bestMove.board = board.slice();
