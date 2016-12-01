@@ -25,7 +25,8 @@ footer {
     position:absolute;
     bottom: 2%;
     font-size: 4em;
-     text-shadow: 3px 3px white;
+    text-shadow: 3px 3px white;
+    cursor: pointer;
 }
 
 
@@ -48,59 +49,10 @@ footer {
     height: 100px;
     margin: 5px;
     border: 1px solid lightgrey;
-    /*text-shadow: 5px 5px 5px grey;*/
-   
+    line-height: 100px;
+    cursor: pointer;
 }
 
-
-#board > div:nth-child(5) {
-    text-align: center;
-    font-size:5.5em;
-    background: white;
-    color: green;
-     transition: transform 1s;
-}
-
-
-#board > div:nth-child(9) {
-    text-align: center;
-    font-size:5.5em;
-    background: white;
-    color: hsl(0,100%,50%);
-     transition: transform 1s;
-}
-
-
-#board > div:nth-child(9):hover {
-    transform-origin: center bottom;
-    transform: rotateX(90deg);
-}
-
-
-#board > div:nth-child(5):hover {
-    transform: rotateX(180deg);
-}
-
-
-#board > div:nth-child(3) {
-          text-align: center;
-    font-size:5.5em;
-    background: white;
-    color: hsl(0,100%,50%);
-   transition: transform 1s;
-}
-
-#board > div:nth-child(3):hover {
-  
-    transform: rotateX(180deg);
-    
-}
-
-#board > div:nth-child(4) {
-   transition: transform 1s;
-}
-
-#board > div:nth-child(4):hover {
-    transform: rotate(10deg) rotate(-30deg);
-    
+#board > div:hover {
+    background: rgba(0,0,0,0.4);
 }
